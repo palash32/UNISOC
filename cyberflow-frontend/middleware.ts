@@ -5,10 +5,10 @@ import type { NextRequest } from "next/server";
 // import { clerkMiddleware } from "@clerk/nextjs/server";
 // export default clerkMiddleware();
 
-export default function proxy(request: NextRequest) {
+export default function middleware(request: NextRequest) {
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: [],
+    matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
