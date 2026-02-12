@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 // import { clerkMiddleware } from "@clerk/nextjs/server";
 // export default clerkMiddleware();
 
-export default function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     return NextResponse.next();
 }
 
