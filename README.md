@@ -1,184 +1,160 @@
-# CyberFlow SOAR Platform
+# 🛡️ UniSOC — Security Operations Center Assessment Toolkit
 
-A multi-tenant Security Orchestration, Automation, and Response (SOAR) platform for SOC teams to ingest security alerts, correlate incidents, and execute automated playbooks.
+A comprehensive, dark-themed SOC Assessment Toolkit built for security analysts, penetration testers, and incident responders. Designed to streamline threat investigations and security assessments during client engagements.
 
-## 🏗️ Architecture
+![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)
+![Go](https://img.shields.io/badge/Go-1.21+-00ADD8?logo=go)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-- **Frontend**: Next.js 14 (TypeScript) + Shadcn/UI
-- **Backend**: Go + Gin Framework
-- **Database**: PostgreSQL (schema-per-tenant isolation)
-- **Auth**: Clerk (multi-tenancy support)
-- **Queue**: Redis (async job processing)
+---
+
+## 🔧 Tools (15 Total)
+
+### 🔍 Investigation Tools
+| Tool | Description | Data Source |
+|------|-------------|-------------|
+| **IP Lookup** | Geolocation, ASN, ISP, timezone | ip-api.com (free) |
+| **URL Analyzer** | URL decomposition, defanged output | Client-side |
+| **Hash Lookup** | Auto-detect MD5/SHA-1/SHA-256/SHA-512 | Client-side + external links |
+| **Domain Intel** | DNS records (A, AAAA, MX, NS, TXT, CNAME) | Google DNS-over-HTTPS |
+| **Whois** | Registration data, nameservers, status codes | RDAP protocol |
+| **CVE Lookup** | CVSS scores, severity, references, timeline | NIST NVD API |
+
+### 🛠️ Utility Tools
+| Tool | Description |
+|------|-------------|
+| **IOC Extractor** | Extract IPs, domains, URLs, hashes, emails, CVEs from raw text |
+| **Defang / Refang** | Safely share URLs/IPs: `hxxps://example[.]com` ↔ live URLs |
+| **Base64 Codec** | Encode/decode Base64, URL, Hex, HTML entities |
+| **Timestamp Converter** | Unix epoch ↔ human-readable with live clock |
+| **Email Header Analyzer** | Parse delivery hops, delays, SPF/DKIM/DMARC |
+| **Regex Tester** | Test patterns with 10 pre-loaded security regexes |
+
+### 🔐 Security Tools
+| Tool | Description | Data Source |
+|------|-------------|-------------|
+| **Password Breach Check** | Check against breach databases | HIBP k-anonymity API |
+| **User-Agent Parser** | Identify browsers, bots, OS, device types | Client-side |
+| **Subnet Calculator** | CIDR ranges, netmasks, host counts, binary | Client-side |
+
+---
+
+## 📁 Project Structure
+
+```
+UniSOC/
+├── cyberflow-frontend/          # Next.js 15 frontend
+│   ├── app/
+│   │   ├── dashboard/
+│   │   │   ├── layout.tsx       # Collapsible sidebar with 3 categories
+│   │   │   ├── page.tsx         # Dashboard with ASCII banner + tool grid
+│   │   │   ├── ip/              # IP Lookup
+│   │   │   ├── url/             # URL Analyzer
+│   │   │   ├── hash/            # Hash Lookup
+│   │   │   ├── domain/          # Domain Intel
+│   │   │   ├── whois/           # WHOIS Lookup
+│   │   │   ├── cve/             # CVE Lookup
+│   │   │   ├── ioc-extractor/   # IOC Extractor
+│   │   │   ├── defang/          # Defang/Refang
+│   │   │   ├── encoder/         # Base64 Codec
+│   │   │   ├── timestamp/       # Timestamp Converter
+│   │   │   ├── email-header/    # Email Header Analyzer
+│   │   │   ├── regex/           # Regex Tester
+│   │   │   ├── password/        # Password Breach Check
+│   │   │   ├── useragent/       # User-Agent Parser
+│   │   │   └── subnet/          # Subnet Calculator
+│   │   └── globals.css          # Dark terminal theme
+│   └── components/
+│       ├── tool-layout.tsx      # Reusable page layout
+│       └── result-card.tsx      # Output card with copy button
+│
+├── cyberflow-backend/           # Go (Gin) backend
+│   ├── main.go                  # Entry point
+│   ├── internal/
+│   │   ├── api/
+│   │   │   ├── routes.go        # All routes including /lookup/*
+│   │   │   ├── handlers/
+│   │   │   │   ├── handlers.go  # SOAR alert/incident handlers
+│   │   │   │   └── lookup.go    # VT, AbuseIPDB, Shodan proxies
+│   │   │   └── middleware/
+│   │   │       └── auth.go      # Clerk auth (disabled for now)
+│   │   ├── config/
+│   │   │   └── config.go        # Env config + API keys
+│   │   └── database/
+│   │       └── database.go      # PostgreSQL via pgxpool
+│   └── .env.example             # API key template
+│
+└── setup-dev.ps1                # Dev setup script
+```
+
+---
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- Node.js 18+ and npm
-- Go 1.21+
-- PostgreSQL 15+
-- Redis 7+
-
-### Frontend Setup
+### Frontend (works immediately, no API keys needed)
 
 ```bash
 cd cyberflow-frontend
-
-# Install dependencies
 npm install
-
-# Copy environment file
-cp .env.local.example .env.local
-
-# Add your Clerk keys to .env.local
-# NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxx
-# CLERK_SECRET_KEY=sk_test_xxx
-
-# Run development server
 npm run dev
+# → http://localhost:3000
 ```
 
-Frontend runs on http://localhost:3000
-
-### Backend Setup
+### Backend (optional — needed for VT/AbuseIPDB/Shodan proxying)
 
 ```bash
 cd cyberflow-backend
-
-# Install Go dependencies
-go mod tidy
-
-# Copy environment file
 cp .env.example .env
-
-# Update .env with your database credentials
-# DATABASE_URL=postgres://user:password@localhost:5432/cyberflow
-# REDIS_URL=localhost:6379
-# CLERK_SECRET_KEY=sk_test_xxx
-
-# Run the server
+# Add your API keys to .env
 go run main.go
+# → http://localhost:8080
 ```
 
-Backend API runs on http://localhost:8080
+---
 
-### Database Setup
+## 🔑 API Keys (Optional)
 
-```bash
-# Create database
-createdb cyberflow
+Most tools work without any API keys. To enable enriched threat intel, add keys to `cyberflow-backend/.env`:
 
-# Apply public schema migrations
-psql -d cyberflow -f migrations/public_schema.sql
+| Service | Get Key | Purpose |
+|---------|---------|---------|
+| [VirusTotal](https://www.virustotal.com/gui/join-us) | Free | Malware/reputation scores |
+| [AbuseIPDB](https://www.abuseipdb.com/account/plans) | Free | IP abuse reports |
+| [Shodan](https://account.shodan.io/) | Free | Open ports & services |
 
-# Tenant schemas are created automatically when organizations sign up
-```
+---
 
-## 📚 Key Features
+## 🎨 Design
 
-### ✅ Completed (MVP Phase 1)
-- Multi-tenant architecture with schema-based isolation
-- Clerk authentication with organization support
-- Dashboard UI with dark mode design
-- Incidents management page
-- Alerts monitoring page
-- Playbooks automation page
-- Integrations management page
-- Go API backend with RESTful endpoints
-- PostgreSQL database schemas
-- Middleware for CORS and authentication
+- **Theme**: Dark terminal/hacker aesthetic — `#0a0a0f` background, matrix green `#00ff41` accents, cyan `#00d4ff` highlights
+- **Typography**: JetBrains Mono for data, Inter for UI
+- **Effects**: Glow shadows, scanline overlays, custom scrollbar
+- **Layout**: Collapsible sidebar, responsive tool grid
 
-### 🔄 In Progress
-- Redis task queuing
-- Webhook ingestion engine
-- Schema mapper for field mapping
-- Playbook execution engine
-- Real-time updates via WebSockets
+---
 
-### 📋 Planned
-- Visual playbook editor
-- Evidence locker (file uploads)
-- Audit log system
-- Mock data generator
-- Tenant isolation tests
-- Integration framework (VirusTotal, Slack, etc.)
+## 🛣️ Roadmap
 
-## 🗂️ Project Structure
+- [ ] Inline VirusTotal/AbuseIPDB/Shodan results in investigation tools
+- [ ] PDF/JSON report export for client deliverables
+- [ ] Investigation case management (save & organize findings)
+- [ ] Clerk authentication for production deployments
+- [ ] Port scanner integration
 
-```
-cyberflow-frontend/
-├── app/
-│   ├── dashboard/          # Main dashboard pages
-│   │   ├── alerts/         # Alerts page
-│   │   ├── incidents/      # Incidents management
-│   │   ├── playbooks/      # Playbook automation
-│   │   └── integrations/   # Third-party integrations
-│   ├── sign-in/            # Authentication pages
-│   └── layout.tsx          # Root layout with Clerk
-├── components/ui/          # Shadcn UI components
-└── lib/
-    └── api.ts              # API client utilities
+---
 
-cyberflow-backend/
-├── main.go                 # Server entry point
-├── internal/
-│   ├── api/
-│   │   ├── routes.go       # API routes definition
-│   │   ├── handlers/       # Request handlers
-│   │   └── middleware/     # Auth & CORS middleware
-│   ├── config/             # Configuration management
-│   └── database/           # Database utilities
-└── migrations/             # SQL migration files
-```
+## 🧰 Tech Stack
 
-## 🔐 Multi-Tenancy Design
+| Layer | Technology |
+|-------|------------|
+| Frontend | Next.js 15, React 19, TypeScript, Tailwind CSS |
+| Backend | Go 1.21+, Gin, pgxpool |
+| Database | PostgreSQL |
+| Auth | Clerk (disabled, ready for production) |
+| APIs | ip-api, Google DNS, RDAP, NIST NVD, HIBP |
 
-CyberFlow uses **schema-based isolation** for maximum security:
+---
 
-- Each organization gets a dedicated PostgreSQL schema (e.g., `org_abc123`)
-- All queries automatically use the correct schema via `search_path`
-- Zero risk of cross-tenant data leakage
-- Easy per-tenant backups and compliance
+## 📜 License
 
-See [multi_tenancy_architecture.md](../brain/0be1a8e8-92df-4ebf-bc36-fe0a312f96a0/multi_tenancy_architecture.md) for details.
-
-## 📡 API Endpoints
-
-### Public (No Auth)
-- `POST /api/v1/webhooks/ingest` - Ingest security alerts
-
-### Protected (Requires Clerk Token)
-- `GET /api/v1/alerts` - List alerts
-- `GET /api/v1/incidents` - List incidents
-- `POST /api/v1/incidents` - Create incident
-- `GET /api/v1/playbooks` - List playbooks
-- `POST /api/v1/playbooks` - Create playbook
-- `POST /api/v1/playbooks/:id/execute` - Execute playbook
-- `GET /api/v1/integrations` - List integrations
-
-## 🧪 Testing
-
-```bash
-# Frontend tests
-cd cyberflow-frontend
-npm test
-
-# Backend tests
-cd cyberflow-backend
-go test ./...
-```
-
-## 📖 Documentation
-
-- [Implementation Plan](../brain/0be1a8e8-92df-4ebf-bc36-fe0a312f96a0/implementation_plan.md)
-- [Multi-Tenancy Architecture](../brain/0be1a8e8-92df-4ebf-bc36-fe0a312f96a0/multi_tenancy_architecture.md)
-- [Task Checklist](../brain/0be1a8e8-92df-4ebf-bc36-fe0a312f96a0/task.md)
-
-## 🤝 Contributing
-
-1. Follow the integration guide in `INTEGRATION_GUIDE.md` (coming soon)
-2. Run linters before committing
-3. Ensure all tests pass
-
-## 📝 License
-
-MIT
+MIT © UniSpark
