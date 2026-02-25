@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 // Auth disabled — will re-enable for client handover
 // import { ClerkProvider } from "@clerk/nextjs";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-geist-sans" });
@@ -35,6 +36,7 @@ export default function RootLayout({
         className={`${inter.variable} ${jetbrainsMono.variable} ${inter.className} antialiased`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
