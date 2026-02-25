@@ -15,12 +15,13 @@ import {
     Network,
     ChevronLeft,
     ChevronRight,
-    Terminal,
     Bug,
     KeyRound,
     Monitor,
     FileText,
     Wifi,
+    ShieldCheck,
+    FileDown,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -28,6 +29,12 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 const toolGroups = [
+    {
+        label: "REPORTS",
+        items: [
+            { name: "Security Report", href: "/dashboard/security-report", icon: FileDown },
+        ],
+    },
     {
         label: "INVESTIGATION",
         items: [
@@ -81,9 +88,9 @@ export default function DashboardLayout({
                 <div className="flex items-center justify-between px-4 h-14 border-b border-terminal-border">
                     {!collapsed && (
                         <Link href="/dashboard" className="flex items-center gap-2">
-                            <Terminal className="h-5 w-5 text-matrix" />
+                            <ShieldCheck className="h-5 w-5 text-matrix" />
                             <span className="text-sm font-bold text-matrix glow-matrix font-mono-soc tracking-wider">
-                                UniSOC
+                                Suraksha
                             </span>
                         </Link>
                     )}
@@ -146,11 +153,18 @@ export default function DashboardLayout({
 
                 {/* Footer */}
                 <div className="border-t border-terminal-border p-3">
-                    <div className={cn("flex items-center", collapsed ? "justify-center" : "gap-2")}>
-                        <Terminal className="h-4 w-4 text-matrix/50" />
+                    <div className={cn("flex flex-col", collapsed ? "items-center" : "gap-1")}>
+                        <div className={cn("flex items-center", collapsed ? "justify-center" : "gap-2")}>
+                            <ShieldCheck className="h-4 w-4 text-matrix/50" />
+                            {!collapsed && (
+                                <span className="text-[10px] text-muted-foreground font-mono-soc">
+                                    v1.0.0
+                                </span>
+                            )}
+                        </div>
                         {!collapsed && (
-                            <span className="text-[10px] text-muted-foreground font-mono-soc">
-                                v1.0.0
+                            <span className="text-[9px] text-slate-600 font-mono-soc">
+                                © UniSpark Innovation
                             </span>
                         )}
                     </div>

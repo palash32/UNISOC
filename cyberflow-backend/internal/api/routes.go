@@ -28,6 +28,15 @@ func SetupRoutes(r *gin.Engine, cfg *config.Config) {
 			webhooks.POST("/ingest", handlers.IngestAlert)
 		}
 
+		// Public stats (real-time usage counter, no auth)
+		stats := v1.Group("/public/stats")
+		{
+			stats.GET("", handlers.GetStats)
+			stats.POST("/scan", handlers.IncrementScan)
+			stats.POST("/report", handlers.IncrementReport)
+			stats.POST("/user", handlers.IncrementUser)
+		}
+
 		// --- SOC Toolkit Lookup Routes (public for now, auth added later) ---
 		lookup := v1.Group("/lookup")
 		{

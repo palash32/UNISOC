@@ -11,9 +11,17 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "UniSOC Toolkit - Security Operations Center Assessment",
+  title: "UniSpark Suraksha — AI Security Assessment Platform",
   description:
-    "Multi-tenant SOC Assessment Toolkit for security analysts, incident responders, and threat researchers.",
+    "AI-powered security assessment platform by UniSpark Innovation. Scan websites, analyze threats, and generate professional security reports.",
+  keywords: ["security assessment", "vulnerability scanner", "threat intelligence", "UniSpark", "Suraksha"],
+  openGraph: {
+    title: "UniSpark Suraksha — AI Security Assessment Platform",
+    description: "Scan. Analyze. Protect. — Professional security assessment powered by AI.",
+    url: "https://unisparksuraksha.ai",
+    siteName: "UniSpark Suraksha",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

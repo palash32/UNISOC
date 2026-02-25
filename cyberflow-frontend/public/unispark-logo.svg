@@ -1,0 +1,24 @@
+<svg width="500" height="100" viewBox="0 0 500 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- U Letter with Flame Design -->
+  <g id="logo-icon">
+    <!-- Outer flame curves -->
+    <path d="M 20 15 Q 15 20 12 30 Q 10 40 12 55 Q 14 70 25 80 C 30 75 32 68 32 60 L 32 25 Q 28 20 20 15 Z" fill="#0066CC"/>
+    <path d="M 27 18 Q 23 22 21 30 Q 20 37 22 48 Q 24 58 30 65 L 30 23 Q 29 20 27 18 Z" fill="#00B8D4" opacity="0.8"/>
+    <path d="M 35 22 Q 32 26 31 33 Q 30 40 32 50 Q 34 58 38 63 L 38 26 Q 37 23 35 22 Z" fill="#00B8D4" opacity="0.6"/>
+    
+    <!-- U shape -->
+    <rect x="45" y="15" width="15" height="65" rx="2" fill="#0066CC"/>
+    <rect x="75" y="15" width="15" height="65" rx="2" fill="#0066CC"/>
+    <path d="M 45 80 Q 67.5 92 90 80 L 90 65 Q 67.5 75 45 65 Z" fill="#0066CC"/>
+  </g>
+  
+  <!-- Text: niSpark Innovation -->
+  <g id="text" fill="#0066CC">
+    <!-- niSpark -->
+    <text x="110" y="52" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="600" letter-spacing="-0.5">niSpark</text>
+    <text x="250" y="52" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="400" letter-spacing="-0.3">Innovation</text>
+    
+    <!-- THE SOLUTION COMPANY -->
+    <text x="185" y="72" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="400" letter-spacing="2" fill="#0066CC">THE SOLUTION COMPANY</text>
+  </g>
+</svg>
